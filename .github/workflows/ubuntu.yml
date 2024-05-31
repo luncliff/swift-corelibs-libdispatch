@@ -7,13 +7,33 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
+
     - name: "Run CMake(Configure)"
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Debug
+        cmake --preset x64-linux
       env:
         CC: clang-15
         CXX: clang++-15
+        VCPKG_ROOT: "/usr/local/share/vcpkg" # VCPKG_INSTALLATION_ROOT
 
     - name: "Run CMake(Build)"
       run: |
-        cmake --build build
+        cmake --build --preset x64-linux-debug
+
+    - name: "Run CTest"
+      run: |
+        ctest --preset x64-linux-debug --output-junit test-libdispatch.xml
+
+    - uses: mikepenz/action-junit-report@v4
+      with:
+        job_name: x64-linux
+        report_paths: '.build/test-*.xml'
+
+    - name: "Run CMake(Install)"
+      run: |
+        cmake --build --preset x64-linux-release --target install
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: release
+        path: install/

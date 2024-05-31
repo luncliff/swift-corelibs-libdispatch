@@ -1,0 +1,60 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 28,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default-options",
+            "hidden": true,
+            "generator": "Ninja Multi-Config",
+            "installDir": "${sourceDir}/.build/install",
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": true,
+                "CMAKE_CONFIGURATION_TYPES": "Debug;Release"
+            }
+        },
+        {
+            "name": "x64-linux",
+            "inherits": "default-options",
+            "binaryDir": "${sourceDir}/.build",
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+            "cacheVariables": {
+                "BUILD_TESTING": true
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "x64-linux-debug",
+            "configurePreset": "x64-linux",
+            "configuration": "Debug"
+        },
+        {
+            "name": "x64-linux-release",
+            "configurePreset": "x64-linux",
+            "configuration": "Release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "x64-linux-debug",
+            "configurePreset": "x64-linux",
+            "configuration": "Debug",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": false
+            }
+        }
+    ]
+}
