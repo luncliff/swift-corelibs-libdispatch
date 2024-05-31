@@ -10,7 +10,7 @@
             "name": "default-options",
             "hidden": true,
             "generator": "Ninja Multi-Config",
-            "installDir": "${sourceDir}/.build/install",
+            "installDir": "${sourceDir}/install",
             "cacheVariables": {
                 "BUILD_SHARED_LIBS": true,
                 "CMAKE_CONFIGURATION_TYPES": "Debug;Release"
@@ -20,7 +20,6 @@
             "name": "x64-linux",
             "inherits": "default-options",
             "binaryDir": "${sourceDir}/.build",
-            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
             "cacheVariables": {
                 "BUILD_TESTING": true
             },

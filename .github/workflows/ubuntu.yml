@@ -2,11 +2,19 @@ name: Ubuntu
 
 on: [ push, pull_request ]
 
+permissions:
+  checks: write
+
 jobs:
   build:
+    name: "Build"
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
+
+    - uses: ConorMacBride/install-package@v1
+      with:
+        apt: ninja-build clang-15 libc++-15-dev
 
     - name: "Run CMake(Configure)"
       run: |
@@ -26,7 +34,8 @@ jobs:
 
     - uses: mikepenz/action-junit-report@v4
       with:
-        job_name: x64-linux
+        job_summary: true
+        job_name: "Build"
         report_paths: '.build/test-*.xml'
 
     - name: "Run CMake(Install)"
@@ -35,5 +44,6 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
-        name: release
+        name: artifact-release
         path: install/
+        retention-days: 2
